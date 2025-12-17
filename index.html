@@ -1,5 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+<link
+  rel="stylesheet"
+  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+/>
+<script
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+</script>
+
 <head>
 <meta charset="UTF-8">
 <title>Haulier Pro</title>
@@ -164,7 +172,13 @@ button.action {
     <input placeholder="Delivery address">
 
     <button class="action">Calculate Route (Demo)</button>
-    <p style="margin-top:10px;">Map will appear here (live maps enabled next step)</p>
+    <div id="map" style="
+  height: 300px;
+  margin-top: 15px;
+  border-radius: 10px;
+  overflow: hidden;
+"></div>
+
   </div>
 </div>
 
@@ -210,6 +224,25 @@ function showSection(id) {
   const sections = document.querySelectorAll('.section');
   sections.forEach(section => {
     section.classList.remove('active');
+  });
+let mapInitialized = false;
+let map;
+
+function initMap() {
+  if (mapInitialized) return;
+
+  map = L.map('map').setView([51.5074, -0.1278], 10); // London default
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19
+  }).addTo(map);
+
+  mapInitialized = true;
+}
+
+document.querySelector("button[onclick=\"showSection('routes')\"]")
+  .addEventListener('click', () => {
+    setTimeout(initMap, 300);
   });
 
   const target = document.getElementById(id);
