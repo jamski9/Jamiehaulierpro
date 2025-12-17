@@ -171,7 +171,8 @@ button.action {
     <label>Point B</label>
     <input placeholder="Delivery address">
 
-    <button class="action">Calculate Route (Demo)</button>
+    <button class="action" onclick="calculateRoute()">Calculate Route</button>
+
     <div id="map" style="
   height: 300px;
   margin-top: 15px;
@@ -283,6 +284,48 @@ function showSection(id) {
 }
 
 function initMap() {
+  async function geocode(address) {
+  const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`;
+  const res = await fetch(url);
+  const data = await res.json();
+  if (!data.length) return null;
+  return [parseFloat(data[0].lat), parseFloat(data[0].lon)];
+}
+
+let routeLine;
+
+async function calculateRoute() {
+  if (!map) return alert("Map not ready");
+
+  const depot = document.getElementById('depot').value;
+  const a = document.getElementById('pointA').value;
+  const b = document.getElementById('pointB').value;
+
+  if (!depot || !a || !b) {
+    alert("Please enter depot, Point A and Point B");
+    return;
+  }
+
+  const depotCoords = await geocode(depot);
+  const aCoords = await geocode(a);
+  const bCoords = await geocode(b);
+
+  if (!depotCoords || !aCoords || !bCoords) {
+    alert("Could not find one of the addresses");
+    return;
+  }
+
+  const points = [depotCoords, aCoords, bCoords, depotCoords];
+
+  if (routeLine) map.removeLayer(routeLine);
+
+  routeLine = L.polyline(points, { color: '#caa24d', weight: 4 }).addTo(map);
+  map.fitBounds(routeLine.getBounds());
+
+  const distance = calculateDistance(points);
+  alert(`Estimated distance: ${distance.toFixed(1)} miles`);
+}
+
   if (map !== null) return;
 
   map = L.map('map').setView([51.5074, -0.1278], 10);
@@ -293,7 +336,31 @@ function initMap() {
   }).addTo(map);
 }
 </script>
+function calculateDistance(points) {
+  let total = 0;
 
+  for (let i = 0; i < points.length - 1; i++) {
+    total += haversine(points[i], points[i + 1]);
+  }
+  return total;
+}
+
+function haversine(p1, p2) {
+  const R = 3959; // miles
+  const dLat = (p2[0] - p1[0]) * Math.PI / 180;
+  const dLon = (p2[1] - p1[1]) * Math.PI / 180;
+  const lat1 = p1[0] * Math.PI / 180;
+  const lat2 = p2[0] * Math.PI / 180;
+
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.sin(dLon / 2) * Math.sin(dLon / 2) *
+    Math.cos(lat1) * Math.cos(lat2);
+
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+}
+ 
 
 </script>
 
