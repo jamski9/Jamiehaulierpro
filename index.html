@@ -22,12 +22,17 @@ header {
 }
 
 .logo {
-  width: 60px;
-  height: 60px;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
-  background: radial-gradient(circle, #800020, #400010);
-  margin-right: 15px;
-  animation: spin 6s linear infinite;
+  background: radial-gradient(circle at top, #8b0025, #3a000f);
+  margin-right: 18px;
+  display: block;
+  animation: spin 4s linear infinite;
+  transform-origin: center;
+  will-change: transform;
+}
+
 }
 
 @keyframes spin {
