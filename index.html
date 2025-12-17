@@ -294,8 +294,12 @@ function initMap() {
 }
 
 let routeLine;
+<button class="action" onclick="calculateRoute()">Calculate Route</button>
 
+<script>
 async function calculateRoute() {
+<script>
+
   if (!map) return alert("Map not ready");
 
   const depot = document.getElementById('depot').value;
@@ -363,7 +367,8 @@ function haversine(p1, p2) {
 }
  
 
-</script>
+
+<script>
 
 </body>
 </html>
