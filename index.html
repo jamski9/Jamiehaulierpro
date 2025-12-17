@@ -131,7 +131,7 @@ button.action {
 }
 </style>
 </head>
-
+ 
 <body>
 
 <header>
@@ -225,19 +225,31 @@ function showSection(id) {
   sections.forEach(section => {
     section.classList.remove('active');
   });
-let mapInitialized = false;
 let map;
 
-function initMap() {
-  if (mapInitialized) return;
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  const target = document.getElementById(id);
+  setTimeout(() => {
+    target.classList.add('active');
 
-  map = L.map('map').setView([51.5074, -0.1278], 10); // London default
+    if (id === 'routes') {
+      setTimeout(loadMap, 200);
+    }
+  }, 50);
+}
+
+function loadMap() {
+  if (map) return;
+
+  map = L.map('map').setView([51.5074, -0.1278], 10);
 
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19
+    maxZoom: 19,
+    attribution: '© OpenStreetMap'
   }).addTo(map);
+}
 
-  mapInitialized = true;
 }
 
 document.querySelector("button[onclick=\"showSection('routes')\"]")
