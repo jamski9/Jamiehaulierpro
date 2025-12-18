@@ -218,162 +218,40 @@ button.action {
   </div>
 </div>
 
-</main>
-</div>
+<div style="height:20px"></div>
 
-<script>
-function showSection(id) {
-  const sections = document.querySelectorAll('.section');
-  sections.forEach(section => {
-    section.classList.remove('active');
-  });
-let map;
-
-function showSection(id) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  const target = document.getElementById(id);
-  setTimeout(() => {
-    target.classList.add('active');
-
-    if (id === 'routes') {
-      setTimeout(loadMap, 200);
-    }
-  }, 50);
-}
-
-function loadMap() {
-  if (map) return;
-
-  map = L.map('map').setView([51.5074, -0.1278], 10);
-
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '© OpenStreetMap'
-  }).addTo(map);
-}
-
-}
-
-document.querySelector("button[onclick="showSection('routes')"
-  .addEventListener('click', () => {
-    setTimeout(initMap, 300);
-  });
-
-  const target = document.getElementById(id);
-  setTimeout(() => {
-    target.classList.add('active');
-  }, 50);
-}
-</script>
 <script>
 let map = null;
+let routeLine = null;
 
+// MENU SWITCHING
 function showSection(id) {
-  // Hide all sections
-  document.querySelectorAll('.section').forEach(section => {
-    section.classList.remove('active');
+  document.querySelectorAll('.section').forEach(s => {
+    s.style.display = 'none';
   });
+  document.getElementById(id).style.display = 'block';
 
-  // Show selected section
-  const target = document.getElementById(id);
-  target.classList.add('active');
-
-  // Load map only when Route Planner is opened
   if (id === 'routes') {
     setTimeout(initMap, 300);
   }
 }
 
+// MAP INITIALISATION
 function initMap() {
-  async function geocode(address) {
-  const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`;
-  const res = await fetch(url);
-  const data = await res.json();
-  if (!data.length) return null;
-  return [parseFloat(data[0].lat), parseFloat(data[0].lon)];
-}
+  if (map) return;
 
-let routeLine;
-<button class="action" onclick="calculateRoute()">Calculate Route</button>
-
-
-<script>
-async function calculateRoute() {
-
-
-  if (!map) return alert("Map not ready");
-
-  const depot = document.getElementById('depot').value;
-  const a = document.getElementById('pointA').value;
-  const b = document.getElementById('pointB').value;
-
-  if (!depot || !a || !b) {
-    alert("Please enter depot, Point A and Point B");
-    return;
-  }
-
-  const depotCoords = await geocode(depot);
-  const aCoords = await geocode(a);
-  const bCoords = await geocode(b);
-
-  if (!depotCoords || !aCoords || !bCoords) {
-    alert("Could not find one of the addresses");
-    return;
-  }
-
-  const points = [depotCoords, aCoords, bCoords, depotCoords];
-
-  if (routeLine) map.removeLayer(routeLine);
-
-  routeLine = L.polyline(points, { color: '#caa24d', weight: 4 }).addTo(map);
-  map.fitBounds(routeLine.getBounds());
-
-  const distance = calculateDistance(points);
-  alert(`Estimated distance: ${distance.toFixed(1)} miles`);
-}
-
-  if (map !== null) return;
-
-  map = L.map('map').setView([51.5074, -0.1278], 10);
+  map = L.map('map').setView([51.5074, -0.1278], 9);
 
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '© OpenStreetMap'
+    maxZoom: 19
   }).addTo(map);
 }
+
+// BUTTON TEST (SAFETY)
+function calculateRoute() {
+  alert("Button works. Route logic loading next.");
+}
 </script>
-function calculateDistance(points) {
-  let total = 0;
-
-  for (let i = 0; i < points.length - 1; i++) {
-    total += haversine(points[i], points[i + 1]);
-  }
-  return total;
-}
-
-function haversine(p1, p2) {
-  const R = 3959; // miles
-  const dLat = (p2[0] - p1[0]) * Math.PI / 180;
-  const dLon = (p2[1] - p1[1]) * Math.PI / 180;
-  const lat1 = p1[0] * Math.PI / 180;
-  const lat2 = p2[0] * Math.PI / 180;
-
-  const a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.sin(dLon / 2) * Math.sin(dLon / 2) *
-    Math.cos(lat1) * Math.cos(lat2);
-
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return R * c;
-  <script>
-
-}
- 
-
-
-
 
 </body>
 </html>
- 
- 
