@@ -5,54 +5,80 @@
 <title>Haulier Pro</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-
 <style>
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background: #0d0f12;
-  color: #eaeaea;
-}
-     
-.app {
-  display: flex;
-  height: 100vh;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #0e1116;
+  color: #e6e6e6;
 }
 
 /* SIDEBAR */
 .sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
   width: 240px;
-  background: #111418;
+  height: 100%;
+  background: #0b0d10;
   padding: 20px;
 }
 
-.sidebar h1 {
-  font-size: 20px;
-  margin-bottom: 25px;
+.sidebar h2 {
+  text-align: center;
+  margin-bottom: 30px;
 }
 
 .sidebar button {
   width: 100%;
-  background: #1e2229;
-  color: #fff;
-  border: none;
+  margin-bottom: 12px;
   padding: 12px;
-  margin-bottom: 10px;
-  text-align: left;
+  background: #1b1f27;
+  border: none;
+  color: white;
   cursor: pointer;
-  border-radius: 6px;
 }
 
 .sidebar button:hover {
-  background: #2a303a;
+  background: #2b313c;
 }
 
-/* MAIN CONTENT */
+/* HEADER */
+.header {
+  position: fixed;
+  left: 240px;
+  right: 0;
+  top: 0;
+  height: 70px;
+  background: linear-gradient(145deg, #0b0d10, #151820);
+  display: flex;
+  align-items: center;
+  padding: 0 25px;
+  border-bottom: 1px solid #2a2f38;
+}
+
+.header img {
+  width: 42px;
+  height: 42px;
+  animation: spin 10s linear infinite;
+}
+
+.header h1 {
+  margin-left: 15px;
+  font-size: 20px;
+}
+
+/* SPIN */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* MAIN */
 .main {
-  flex: 1;
+  margin-left: 240px;
+  margin-top: 70px;
   padding: 25px;
-  overflow-y: auto;
 }
 
 .section {
@@ -63,164 +89,116 @@ body {
   display: block;
 }
 
-input, textarea, button.action {
-  width: 100%;
-  padding: 10px;
-  margin-top: 10px;
-  background: #1a1d22;
-  color: #fff;
-  border: 1px solid #333;
+.card {
+  background: #151820;
+  padding: 20px;
+  margin-bottom: 20px;
   border-radius: 6px;
 }
 
+input, select {
+  width: 100%;
+  padding: 10px;
+  margin: 6px 0;
+}
+
 button.action {
+  padding: 10px 15px;
   background: #8b1e2d;
   border: none;
+  color: white;
   cursor: pointer;
 }
-
-button.action:hover {
-  background: #a32538;
-}
-
-#map {
-  height: 350px;
-  margin-top: 15px;
-  border-radius: 12px;
-  background: #000;
-}
 </style>
-/* ===== FMX PREMIUM HEADER ===== */
-.header {
-  position: fixed;
-  top: 0;
-  left: 240px;
-  right: 0;
-  height: 70px;
-  background: linear-gradient(145deg, #0b0d10, #151820);
-  display: flex;
-  align-items: center;
-  padding: 0 25px;
-  z-index: 1000;
-  border-bottom: 1px solid #2a2f38;
-}
-
-.header-title {
-  font-size: 20px;
-  font-weight: bold;
-  margin-left: 15px;
-}
-
-/* FMX LOGO SPIN (NO SCRIPT NEEDED) */
-.fmx-logo {
-  width: 46px;
-  height: 46px;
-  animation: fmxSpin 10s linear infinite;
-}
-
-@keyframes fmxSpin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* Push content down below header */
-.main {
-  margin-top: 70px;
-}
-
 </head>
 
 <body>
 
-<div class="app">
-
-  <!-- LEFT MENU -->
-  <div class="sidebar">
-    <h1>🚛 Haulier Pro</h1>
-    <button onclick="showSection('home')">Dashboard</button>
-    <button onclick="showSection('routes')">Route Planner</button>
-    <button onclick="showSection('loads')">Loads & Hours</button>
-    <button onclick="showSection('suppliers')">Suppliers</button>
-    <button onclick="showSection('muck')">Muck Calculator</button>
-    <button onclick="showSection('reports')">Reports (SI / WAC)</button>
-  </div>
-
-  <!-- MAIN AREA -->
-  <div class="header">
-  <img src="fmx-logo.png" class="fmx-logo" alt="FMX Truck Logo">
-  <div class="header-title">Haulier Pro</div>
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <h2>Haulier Pro</h2>
+  <button onclick="show('home')">Home</button>
+  <button onclick="show('route')">Route Planner</button>
+  <button onclick="show('loads')">Loads & Hours</button>
+  <button onclick="show('suppliers')">Suppliers</button>
+  <button onclick="show('materials')">Materials</button>
 </div>
 
-  <div class="main">
+<!-- HEADER -->
+<div class="header">
+  <img src="fmx-logo.png" alt="FMX Logo">
+  <h1>Haulier Pro</h1>
+</div>
 
-    <section id="home" class="section active">
-      <h2>Dashboard</h2>
-      <p>Welcome to Haulier Pro. Select a tool from the left menu.</p>
-    </section>
+<!-- MAIN -->
+<div class="main">
 
-    <section id="routes" class="section">
-      <h2>Route Planner</h2>
-
-      <input placeholder="Depot (postcode or address)">
-      <input placeholder="Point A (collection)">
-      <input placeholder="Point B (delivery)">
-
-      <button class="action" onclick="alert('Routing engine coming next')">
-        Calculate Route
-      </button>
-
-      <div id="map"></div>
-    </section>
-
-    <section id="loads" class="section">
-      <h2>Loads & Driver Hours</h2>
-      <p>Calculate trips per day based on UK driving rules.</p>
-    </section>
-
-    <section id="suppliers" class="section">
-      <h2>Suppliers</h2>
-      <p>Upload materials and compare closest / cheapest suppliers.</p>
-    </section>
-
-    <section id="muck" class="section">
-      <h2>Muck Calculator</h2>
-      <p>Convert cubic metres to tonnes.</p>
-    </section>
-
-    <section id="reports" class="section">
-      <h2>SI & WAC Reports</h2>
-      <p>Upload reports and get contamination guidance.</p>
-    </section>
-
+<!-- HOME -->
+<div id="home" class="section active">
+  <div class="card">
+    <h2>Welcome</h2>
+    <p>Professional haulier planning system – offline demo.</p>
   </div>
 </div>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<!-- ROUTE -->
+<div id="route" class="section">
+  <div class="card">
+    <h2>Route Planner</h2>
+    <input placeholder="Start postcode / address">
+    <input placeholder="Destination postcode / address">
+    <button class="action" onclick="alert('Demo: best route calculated')">Calculate Route</button>
+    <p>Distance: 84 miles (demo)</p>
+  </div>
+</div>
+
+<!-- LOADS -->
+<div id="loads" class="section">
+  <div class="card">
+    <h2>Loads & Driver Hours</h2>
+    <input placeholder="One-way distance (miles)">
+    <input placeholder="Average speed (mph)">
+    <input placeholder="Driver hours available">
+    <button class="action" onclick="alert('Demo: loads calculated')">Calculate</button>
+    <p>Estimated loads today: 6 (demo)</p>
+  </div>
+</div>
+
+<!-- SUPPLIERS -->
+<div id="suppliers" class="section">
+  <div class="card">
+    <h2>Supplier Recommendation</h2>
+    <select>
+      <option>Closest supplier</option>
+      <option>Cheapest supplier</option>
+    </select>
+    <input placeholder="Material type">
+    <button class="action" onclick="alert('Demo: supplier selected')">Find Supplier</button>
+    <p>Recommended: Supplier A (demo)</p>
+  </div>
+</div>
+
+<!-- MATERIALS -->
+<div id="materials" class="section">
+  <div class="card">
+    <h2>Material Calculator</h2>
+    <input placeholder="Cubic metres (m³)">
+    <select>
+      <option>Soil</option>
+      <option>Muck</option>
+      <option>Hardcore</option>
+    </select>
+    <button class="action" onclick="alert('Demo: converted to tonnes')">Convert</button>
+    <p>Estimated tonnes: 160t (demo)</p>
+  </div>
+</div>
+
+</div>
 
 <script>
-let map = null;
-
-function showSection(id) {
+function show(id) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-
-  if (id === 'routes') {
-    setTimeout(initMap, 200);
-  }
-}
-
-function initMap() {
-  if (map) return;
-
-  map = L.map('map').setView([51.5074, -0.1278], 9);
-
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19
-  }).addTo(map);
 }
 </script>
 
