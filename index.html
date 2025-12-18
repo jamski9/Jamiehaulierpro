@@ -90,6 +90,48 @@ button.action:hover {
   background: #000;
 }
 </style>
+/* ===== FMX PREMIUM HEADER ===== */
+.header {
+  position: fixed;
+  top: 0;
+  left: 240px;
+  right: 0;
+  height: 70px;
+  background: linear-gradient(145deg, #0b0d10, #151820);
+  display: flex;
+  align-items: center;
+  padding: 0 25px;
+  z-index: 1000;
+  border-bottom: 1px solid #2a2f38;
+}
+
+.header-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-left: 15px;
+}
+
+/* FMX LOGO SPIN (NO SCRIPT NEEDED) */
+.fmx-logo {
+  width: 46px;
+  height: 46px;
+  animation: fmxSpin 10s linear infinite;
+}
+
+@keyframes fmxSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Push content down below header */
+.main {
+  margin-top: 70px;
+}
+
 </head>
 
 <body>
@@ -108,6 +150,11 @@ button.action:hover {
   </div>
 
   <!-- MAIN AREA -->
+  <div class="header">
+  <img src="fmx-logo.png" class="fmx-logo" alt="FMX Truck Logo">
+  <div class="header-title">Haulier Pro</div>
+</div>
+
   <div class="main">
 
     <section id="home" class="section active">
