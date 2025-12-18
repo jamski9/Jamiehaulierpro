@@ -54,8 +54,22 @@ body {
   overflow-y: auto;
 }
 
-.section {
-  display: none;
+.function showSection(id) {
+  document.querySelectorAll('.section').forEach(sec => {
+    sec.style.display = 'none';
+  });
+
+  const active = document.getElementById(id);
+  active.style.display = 'block';
+
+  if (id === 'routes') {
+    setTimeout(() => {
+      initMap();
+      map.invalidateSize(); // ⭐ THIS IS THE FIX
+    }, 300);
+  }
+}
+
 }
 
 #home {
