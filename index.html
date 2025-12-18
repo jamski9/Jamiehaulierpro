@@ -1,107 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
-<link
-  rel="stylesheet"
-  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-/>
-<script
-  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
-</script>
-                     
 <head>
 <meta charset="UTF-8">
 <title>Haulier Pro</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-     
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
 <style>
 body {
   margin: 0;
-  font-family: 'Arial', sans-serif;
-  background: radial-gradient(circle at top, #2a2a2a, #0a0a0a);
-  color: #f5f5f5;
-}
-    
-header {
-  background: linear-gradient(90deg, #111, #222);
-  padding: 15px 20px;
-  display: flex;
-  align-items: center;
-  border-bottom: 2px solid #444;
-}
-   
-.logo {
-  width: 70px;
-  height: 70px;
-  margin-right: 18px;
-  display: block;
-  animation: spin 4s linear infinite;
-  transform-origin: 50% 50%;
-}
-
-}
-
-}
-
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-h1 {
-  font-size: 24px;
-  letter-spacing: 2px;
-}
-
-.container {
-  display: flex;
-}
-    
-nav {
-  width: 220px;
+  font-family: Arial, sans-serif;
   background: #111;
-  border-right: 2px solid #333;
-  padding-top: 20px;
+  color: #eee;
+}
+
+header {
+  background: #000;
+  padding: 15px;
+  text-align: center;
+  font-size: 22px;
+}
+
+nav {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  background: #1b1b1b;
+  padding: 10px;
 }
 
 nav button {
-  width: 100%;
-  background: none;
+  background: #333;
+  color: #fff;
   border: none;
-  color: #ddd;
-  padding: 15px;
-  text-align: left;
-  font-size: 16px;
+  padding: 10px 14px;
   cursor: pointer;
 }
 
 nav button:hover {
-  background: #222;
+  background: #555;
 }
 
-main {
-  flex: 1;
-  padding: 25px;
+.section {
+  display: none;
+  padding: 20px;
 }
+
+#home {
+  display: block;
+}
+
+input, button.action {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+}
+
+#map {
+  height: 300px;
+  margin-top: 15px;
+  border-radius: 12px;
+}
+</style>
+</head>
+
+<body>
+
+<header>🚛 Haulier Pro</header>
+
+<nav>
+  <button onclick="showSection('home')">Home</button>
+  <button onclick="showSection('routes')">Route Planner</button>
+</nav>
+
+<section id="home" class="section">
+  <h2>Welcome</h2>
+  <p>This is your haulier planning app.</p>
+</section>
+
+<section id="routes" class="section">
+  <h2>Route Planner</h2>
+
+  <input id="depot" placeholder="Depot postcode">
+  <input id="pointA" placeholder="Collection address">
+  <input id="pointB" placeholder="Delivery address">
+
+  <button class="action" onclick="calculateRoute()">Calculate Route</button>
+
+  <div id="map"></div>
+</section>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
 let map;
 
 function showSection(id) {
-  document.querySelectorAll('.section').forEach(sec => {
-    sec.style.display = 'none';
+  document.querySelectorAll('.section').forEach(s => {
+    s.style.display = 'none';
   });
   document.getElementById(id).style.display = 'block';
 
-  <section id="routes" class="section">
-
+  if (id === 'routes') {
+    setTimeout(initMap, 200);
   }
 }
 
-<div id="map" style="height:300px;margin-top:15px;border-radius:12px;"></div>
+function initMap() {
+  if (map) return;
 
-
-
-  map = L.map('map').setView([51.5074, -0.1278], 10);
+  map = L.map('map').setView([51.5074, -0.1278], 9);
 
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19
@@ -109,7 +118,7 @@ function showSection(id) {
 }
 
 function calculateRoute() {
-  alert('Route button works ✔');
+  alert("Route Planner is working ✔");
 }
 </script>
 
