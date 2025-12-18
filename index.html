@@ -6,89 +6,89 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-         
+
 <style>
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: #0f1114;
+  background: #0d0f12;
   color: #eaeaea;
 }
-               
+
 .app {
   display: flex;
   height: 100vh;
 }
 
-/* LEFT MENU */
+/* SIDEBAR */
 .sidebar {
-  width: 220px;
-  background: #14171c;
-  padding: 15px;
+  width: 240px;
+  background: #111418;
+  padding: 20px;
 }
 
 .sidebar h1 {
-  font-size: 18px;
-  margin-bottom: 20px;
+  font-size: 20px;
+  margin-bottom: 25px;
 }
 
 .sidebar button {
   width: 100%;
-  background: #1f232a;
+  background: #1e2229;
   color: #fff;
   border: none;
   padding: 12px;
   margin-bottom: 10px;
   text-align: left;
   cursor: pointer;
+  border-radius: 6px;
 }
 
 .sidebar button:hover {
-  background: #2a2f38;
+  background: #2a303a;
 }
 
 /* MAIN CONTENT */
 .main {
   flex: 1;
-  padding: 20px;
+  padding: 25px;
   overflow-y: auto;
 }
 
-.function showSection(id) {
-  document.querySelectorAll('.section').forEach(sec => {
-    sec.style.display = 'none';
-  });
-
-  const active = document.getElementById(id);
-  active.style.display = 'block';
-
-  if (id === 'routes') {
-    setTimeout(() => {
-      initMap();
-      map.invalidateSize(); // ⭐ THIS IS THE FIX
-    }, 300);
-  }
+.section {
+  display: none;
 }
 
-}
-
-#home {
+.section.active {
   display: block;
 }
 
-input, button.action {
+input, textarea, button.action {
   width: 100%;
   padding: 10px;
   margin-top: 10px;
+  background: #1a1d22;
+  color: #fff;
+  border: 1px solid #333;
+  border-radius: 6px;
+}
+
+button.action {
+  background: #8b1e2d;
+  border: none;
+  cursor: pointer;
+}
+
+button.action:hover {
+  background: #a32538;
 }
 
 #map {
   height: 350px;
   margin-top: 15px;
   border-radius: 12px;
+  background: #000;
 }
-</style>
-
 </style>
 </head>
 
@@ -96,33 +96,86 @@ input, button.action {
 
 <div class="app">
 
+  <!-- LEFT MENU -->
   <div class="sidebar">
     <h1>🚛 Haulier Pro</h1>
-    <button onclick="showSection('home')">Home</button>
+    <button onclick="showSection('home')">Dashboard</button>
     <button onclick="showSection('routes')">Route Planner</button>
+    <button onclick="showSection('loads')">Loads & Hours</button>
+    <button onclick="showSection('suppliers')">Suppliers</button>
+    <button onclick="showSection('muck')">Muck Calculator</button>
+    <button onclick="showSection('reports')">Reports (SI / WAC)</button>
   </div>
 
+  <!-- MAIN AREA -->
   <div class="main">
 
-    <section id="home" class="section">
+    <section id="home" class="section active">
       <h2>Dashboard</h2>
-      <p>Welcome to Haulier Pro.</p>
+      <p>Welcome to Haulier Pro. Select a tool from the left menu.</p>
     </section>
 
     <section id="routes" class="section">
       <h2>Route Planner</h2>
 
-      <input id="depot" placeholder="Depot postcode">
-      <input id="pointA" placeholder="Collection address">
-      <input id="pointB" placeholder="Delivery address">
+      <input placeholder="Depot (postcode or address)">
+      <input placeholder="Point A (collection)">
+      <input placeholder="Point B (delivery)">
 
-      <button class="action" onclick="calculateRoute()">Calculate Route</button>
+      <button class="action" onclick="alert('Routing engine coming next')">
+        Calculate Route
+      </button>
 
       <div id="map"></div>
     </section>
 
+    <section id="loads" class="section">
+      <h2>Loads & Driver Hours</h2>
+      <p>Calculate trips per day based on UK driving rules.</p>
+    </section>
+
+    <section id="suppliers" class="section">
+      <h2>Suppliers</h2>
+      <p>Upload materials and compare closest / cheapest suppliers.</p>
+    </section>
+
+    <section id="muck" class="section">
+      <h2>Muck Calculator</h2>
+      <p>Convert cubic metres to tonnes.</p>
+    </section>
+
+    <section id="reports" class="section">
+      <h2>SI & WAC Reports</h2>
+      <p>Upload reports and get contamination guidance.</p>
+    </section>
+
   </div>
 </div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+let map = null;
+
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+
+  if (id === 'routes') {
+    setTimeout(initMap, 200);
+  }
+}
+
+function initMap() {
+  if (map) return;
+
+  map = L.map('map').setView([51.5074, -0.1278], 9);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19
+  }).addTo(map);
+}
+</script>
 
 </body>
 </html>
