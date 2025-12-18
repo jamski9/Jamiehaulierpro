@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<section id="home" class="section" style="display:block;">
+
 <html lang="en">
 <link
   rel="stylesheet"
@@ -92,13 +94,14 @@ function showSection(id) {
   });
   document.getElementById(id).style.display = 'block';
 
-  if (id === 'routes') {
-    setTimeout(initMap, 300);
+  <section id="routes" class="section">
+
   }
 }
 
-function initMap() {
-  if (map) return;
+<div id="map" style="height:300px;margin-top:15px;border-radius:12px;"></div>
+
+
 
   map = L.map('map').setView([51.5074, -0.1278], 10);
 
