@@ -153,6 +153,161 @@ button.action {
 </div>
 
 <!-- LOADS -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Haulier Pro</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #0e1116;
+  color: #e6e6e6;
+}
+
+/* SIDEBAR */
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 240px;
+  height: 100%;
+  background: #0b0d10;
+  padding: 20px;
+}
+
+.sidebar h2 {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.sidebar button {
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 12px;
+  background: #1b1f27;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+.sidebar button:hover {
+  background: #2b313c;
+}
+
+/* HEADER */
+.header {
+  position: fixed;
+  left: 240px;
+  right: 0;
+  top: 0;
+  height: 70px;
+  background: linear-gradient(145deg, #0b0d10, #151820);
+  display: flex;
+  align-items: center;
+  padding: 0 25px;
+  border-bottom: 1px solid #2a2f38;
+}
+
+.header img {
+  width: 42px;
+  height: 42px;
+  animation: spin 10s linear infinite;
+}
+
+.header h1 {
+  margin-left: 15px;
+  font-size: 20px;
+}
+
+/* SPIN */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* MAIN */
+.main {
+  margin-left: 240px;
+  margin-top: 70px;
+  padding: 25px;
+}
+
+.section {
+  display: none;
+}
+
+.section.active {
+  display: block;
+}
+
+.card {
+  background: #151820;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 6px;
+}
+
+input, select {
+  width: 100%;
+  padding: 10px;
+  margin: 6px 0;
+}
+
+button.action {
+  padding: 10px 15px;
+  background: #8b1e2d;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <h2>Haulier Pro</h2>
+  <button onclick="show('home')">Home</button>
+  <button onclick="show('route')">Route Planner</button>
+  <button onclick="show('loads')">Loads & Hours</button>
+  <button onclick="show('suppliers')">Suppliers</button>
+  <button onclick="show('materials')">Materials</button>
+</div>
+
+<!-- HEADER -->
+<div class="header">
+  <img src="fmx-logo.png" alt="FMX Logo">
+  <h1>Haulier Pro</h1>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+<!-- HOME -->
+<div id="home" class="section active">
+  <div class="card">
+    <h2>Welcome</h2>
+    <p>Professional haulier planning system – offline demo.</p>
+  </div>
+</div>
+
+<!-- ROUTE -->
+<div id="route" class="section">
+  <div class="card">
+    <h2>Route Planner</h2>
+    <input placeholder="Start postcode / address">
+    <input placeholder="Destination postcode / address">
+    <button class="action" onclick="alert('Demo: best route calculated')">Calculate Route</button>
+    <p>Distance: 84 miles (demo)</p>
+  </div>
+</div>
+
+<!-- LOADS -->
 <div id="loads" class="section">
   <div class="card">
     <h2>Loads & Driver Hours</h2>
@@ -200,6 +355,106 @@ function show(id) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
+</script>
+
+</body>
+</html>
+<div id="loads" class="section">
+  <div class="card">
+    <h2>Loads & Driver Hours (UK)</h2>
+
+    <label>One-way distance (miles)</label>
+    <input id="distance" type="number">
+
+    <label>Average speed (mph)</label>
+    <input id="speed" type="number" value="45">
+
+    <label>Driver hours available</label>
+    <input id="hours" type="number" value="9">
+
+    <label>Number of trucks</label>
+    <input id="trucks" type="number" value="1">
+
+    <label>Payload per truck (tonnes)</label>
+    <input id="payload" type="number" value="20">
+
+    <label>Total material (tonnes)</label>
+    <input id="material" type="number">
+
+    <button class="action" onclick="calculateLoads()">Calculate</button>
+
+    <p id="loadResult"></p>
+  </div>
+</div>
+
+  </div>
+</div>
+
+<!-- SUPPLIERS -->
+<div id="suppliers" class="section">
+  <div class="card">
+    <h2>Supplier Recommendation</h2>
+    <select>
+      <option>Closest supplier</option>
+      <option>Cheapest supplier</option>
+    </select>
+    <input placeholder="Material type">
+    <button class="action" onclick="alert('Demo: supplier selected')">Find Supplier</button>
+    <p>Recommended: Supplier A (demo)</p>
+  </div>
+</div>
+
+<!-- MATERIALS -->
+<div id="materials" class="section">
+  <div class="card">
+    <h2>Material Calculator</h2>
+    <input placeholder="Cubic metres (m³)">
+    <select>
+      <option>Soil</option>
+      <option>Muck</option>
+      <option>Hardcore</option>
+    </select>
+    <button class="action" onclick="alert('Demo: converted to tonnes')">Convert</button>
+    <p>Estimated tonnes: 160t (demo)</p>
+  </div>
+</div>
+
+</div>
+
+<script>
+function show(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+} function calculateLoads() {
+  const distance = Number(document.getElementById("distance").value);
+  const speed = Number(document.getElementById("speed").value);
+  const hours = Number(document.getElementById("hours").value);
+  const trucks = Number(document.getElementById("trucks").value);
+  const payload = Number(document.getElementById("payload").value);
+  const material = Number(document.getElementById("material").value);
+
+  if (!distance || !material) {
+    document.getElementById("loadResult").innerText = "Please enter distance and material.";
+    return;
+  }
+
+  const roundTripMiles = distance * 2;
+  const driveTime = roundTripMiles / speed;
+
+  // UK simplified break rule: 45 min after 4.5h
+  const breakTime = driveTime > 4.5 ? 0.75 : 0;
+  const tripTime = driveTime + breakTime;
+
+  const loadsPerTruck = Math.floor(hours / tripTime);
+  const totalLoadsPerDay = loadsPerTruck * trucks;
+  const tonnesPerDay = totalLoadsPerDay * payload;
+  const days = Math.ceil(material / tonnesPerDay);
+
+  document.getElementById("loadResult").innerHTML =
+    `Loads per truck per day: <b>${loadsPerTruck}</b><br>
+     Total loads per day: <b>${totalLoadsPerDay}</b><br>
+     Tonnes moved per day: <b>${tonnesPerDay}t</b><br>
+     Estimated duration: <b>${days} day(s)</b>`;
 </script>
 
 </body>
